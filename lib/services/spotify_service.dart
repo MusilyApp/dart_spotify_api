@@ -1,14 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dart_spotify_api/dart_spotify_api.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:dart_spotify_api/enums/search_type.dart';
-import 'package:dart_spotify_api/models/album_model.dart';
-import 'package:dart_spotify_api/models/artist_model.dart';
-import 'package:dart_spotify_api/models/playlist_model.dart';
-import 'package:dart_spotify_api/models/track_model.dart';
-import 'package:dart_spotify_api/models/user_model.dart';
 import 'package:oauth2_client/spotify_oauth2_client.dart';
 
 class SpotifyService {
@@ -386,6 +381,104 @@ class SpotifyService {
 
     if (isExpired) {
       await _refreshAccessToken();
+    }
+  }
+
+  Future<List<Artist>> getSimilarArtists(String artistId) async {
+    try {
+      final response = await _dio.get(
+        'https://api.spotify.com/v1/artists/$artistId/related-artists',
+      );
+      final artists = (response.data['artists'] as List)
+          .map((artist) => Artist.fromMap(artist))
+          .toList();
+      return artists;
+    } catch (e) {
+      throw Exception('Error fetching similar artists: $e');
+    }
+  }
+
+  Future<List<SimplifiedTrack>> getAlbumTracks(String albumId) async {
+    try {
+      final response = await _dio.get(
+        'https://api.spotify.com/v1/albums/$albumId/tracks',
+      );
+      final tracks = (response.data['items'] as List)
+          .map((track) => SimplifiedTrack.fromMap(track))
+          .toList();
+      return tracks;
+    } catch (e) {
+      throw Exception('Error fetching album tracks: $e');
+    }
+  }
+
+  Future<List<TrackModel>> getTopTracks(String artistId) async {
+    try {
+      final response = await _dio.get(
+        'https://api.spotify.com/v1/artists/$artistId/top-tracks',
+        queryParameters: {
+          'market': Market.AM.name,
+        },
+      );
+      print(response.data['tracks']);
+      final tracks = (response.data['tracks'] as List)
+          .map(
+            (track) => TrackModel.fromMap(track),
+          )
+          .toList();
+      return tracks;
+    } catch (e) {
+      throw Exception('Error fetching top tracks: $e');
+    }
+  }
+
+  Future<List<SimplifiedAlbum>> getTopAlbums(String artistId) async {
+    try {
+      final response = await _dio.get(
+        'https://api.spotify.com/v1/artists/$artistId/albums',
+        queryParameters: {
+          'include_groups': 'album',
+          'market': Market.AM.name,
+        },
+      );
+      final albums = (response.data['items'] as List)
+          .map((album) => SimplifiedAlbum.fromMap(album))
+          .toList();
+      return albums;
+    } catch (e) {
+      throw Exception('Error fetching top albums: $e');
+    }
+  }
+
+  Future<List<SimplifiedAlbum>> getTopSingles(String artistId) async {
+    try {
+      final response = await _dio.get(
+        'https://api.spotify.com/v1/artists/$artistId/albums',
+        queryParameters: {
+          'include_groups': 'single',
+          'market': Market.AM.name,
+        },
+      );
+      final albums = (response.data['items'] as List)
+          .map((album) => SimplifiedAlbum.fromMap(album))
+          .toList();
+      return albums;
+    } catch (e) {
+      throw Exception('Error fetching top singles: $e');
+    }
+  }
+
+  Future<List<SimplifiedPlaylist>> getUserPlaylists() async {
+    try {
+      final response = await _dio.get(
+        'https://api.spotify.com/v1/me/playlists',
+      );
+      final playlists = (response.data['items'] as List)
+          .map((playlist) => SimplifiedPlaylist.fromMap(playlist))
+          .toList();
+      return playlists;
+    } catch (e) {
+      throw Exception('Error fetching user playlists: $e');
     }
   }
 }
