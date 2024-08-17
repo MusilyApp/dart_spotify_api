@@ -1,22 +1,22 @@
 ## Spotify API Dart Client
 
-This repository provides a Dart client for the Spotify API, allowing you to interact with its features.
+This repository provides a comprehensive Dart client for the Spotify API, empowering you to seamlessly interact with its various features.
 
 ### Installation
 
-#### 1. Using `flutter pub` (for Flutter projects)
+#### Using `flutter pub` (for Flutter projects)
 
 ```bash
 flutter pub add dart_spotify_api
 ```
 
-#### 2. Using `dart pub` (for general Dart projects)
+#### Using `dart pub` (for general Dart projects)
 
 ```bash
 dart pub add dart_spotify_api
 ```
 
-#### 3. Modifying `pubspec.yaml`
+#### Modifying `pubspec.yaml`
 
 Add the following line to your `pubspec.yaml` file under the `dependencies` section:
 
@@ -27,86 +27,72 @@ dependencies:
 
 Then, run `flutter pub get` (for Flutter projects) or `dart pub get` (for general Dart projects) to install the package.
 
-#### Android
+#### Platform-Specific Configuration
 
-On Android you must first set the *minSdkVersion* in the *build.gradle* file:
-```
-  defaultConfig {
-    ...
-    minSdkVersion 18
-    ...
-  }
-```
+**Android**
 
-Add the following code to your `AndroidManifest.xml` file:
+- **Minimum SDK Version:** Set the `minSdkVersion` in your `build.gradle` file to at least 18.
+- **AndroidManifest.xml:** Add the following code within your `AndroidManifest.xml` file:
 
 ```xml
-    <activity android:name="com.linusu.flutter_web_auth_2.CallbackActivity" android:exported="true">
-      <intent-filter android:label="flutter_web_auth_2">
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="custom-scheme" /> <!-- This must correspond to the custom scheme used for instantiatng the client... See below -->
-      </intent-filter>
-    </activity>
+<activity android:name="com.linusu.flutter_web_auth_2.CallbackActivity" android:exported="true">
+  <intent-filter android:label="flutter_web_auth_2">
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data android:scheme="custom-scheme" /> <!-- This must correspond to the custom scheme used for instantiating the client. See below. -->
+  </intent-filter>
+</activity>
 ```
 
-#### iOS
+**iOS**
 
-On iOS you need to set the *platform* in the *ios/Podfile* file:
-```
-platform :ios, '11.0'
-```
+- **Podfile:** Set the `platform` in your `ios/Podfile` file to `platform :ios, '11.0'`.
 
-#### Web
+**Web**
 
-Web support has been added in the 2.2.0 version, and should be considered preliminary.
-
-On the web platform you **must** register your application using an **HTTPS** redirect uri.
-
-When the authorization code flow is used, the authorization phase will be carried out by opening a popup window to the provider login page.
-
-After the user grants access to your application, the server will redirect the browser to the redirect uri. This page should contain some javascript code to read the _code_ parameter sent by the authorization server and pass it to the parent window through postMessage.
-
-Something like:
+- Web support is available starting from version 2.2.0. It's considered preliminary but functional.
+- **HTTPS Redirect URI:** You **must** register your application using an **HTTPS** redirect URI.
+- **JavaScript for Code Retrieval:** The authorization code flow involves opening a popup window. After the user grants access, the server redirects the browser to your redirect URI. This page should include JavaScript code to retrieve the `code` parameter from the URL and pass it to the parent window using `postMessage`. Here's an example:
 
 ```javascript
 window.onload = function() {
-	const urlParams = new URLSearchParams(window.location.search);
-	const code = urlParams.get('code');
-	if(code) {
-		window.opener.postMessage(window.location.href, _url_of_the_opener_window_);
-	}
-}
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
+  if (code) {
+    window.opener.postMessage(window.location.href, '_url_of_the_opener_window_');
+  }
+};
 ```
 
-**Please note** that the browser can't *securely* store confidential information! The OAuth2Helper class, when used on the web, stores the tokens in the localStorage, and this means they won't be encrypted!
+**Important Note:** The browser cannot securely store confidential information. When using the OAuth2Helper class on the web, tokens are stored in `localStorage`, which means they are not encrypted.
 
-See [oauth2_client](https://github.com/teranetsrl/oauth2_client/) for more information.
-
+###### Refer to the [oauth2_client](https://github.com/teranetsrl/oauth2_client/) documentation for more detailed information regarding the installation instructions above.
+---
 #### Linux
 
 - Install the `libsecret-1-dev` dependency:
+
 ```bash
 sudo apt-get install libsecret-1-dev
 ```
 
 #### Linux/Windows:
 
-   - Define a local port for the web server:
+- **Local Port:** Define a local port for the web server when using this library on Linux/Windows:
 
-     ```dart
-      final spotifyService = SpotifyService(
-        // Other properties
-        localhostPort: 8080, // Set the local port for Linux/Windows
-      );
-     ```
+  ```dart
+  final spotifyService = SpotifyService(
+    // Other properties
+    localhostPort: 8080, // Set the local port for Linux/Windows
+  );
+  ```
 
    - Add the URL `http://localhost:{port}` to your app's URLs in the Spotify dashboard.
 
 ### Usage
 
-Here's a basic example of how to use the Spotify API in Dart:
+This section provides basic examples to get you started with the Spotify API in Dart.
 
 ```dart
 import 'package:dart_spotify_api/dart_spotify_api.dart';
@@ -129,7 +115,7 @@ void main() async {
 
   // Check if the user is logged in
   if (spotifyService.loggedIn) {
-    // Do something
+    // Perform actions after successful login
   }
 }
 ```
