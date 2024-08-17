@@ -44,7 +44,7 @@ class SimplifiedAlbum {
       name: map['name'] as String,
       totalTracks: map['total_tracks'] as int,
       availableMarkets: List<Market>.from(
-        (map['available_markets'] as List).map<Market>(
+        (map['available_markets'] as List? ?? []).map<Market>(
           (x) => Market.values.byName(x),
         ),
       ),
