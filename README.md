@@ -22,12 +22,13 @@ Add the following line to your `pubspec.yaml` file under the `dependencies` sect
 
 ```yaml
 dependencies:
-  dart_spotify_api: ^1.0.0
+  dart_spotify_api: ^1.1.0
 ```
 
 Then, run `flutter pub get` (for Flutter projects) or `dart pub get` (for general Dart projects) to install the package.
 
 #### Android
+
 On Android you must first set the *minSdkVersion* in the *build.gradle* file:
 ```
   defaultConfig {
@@ -36,6 +37,7 @@ On Android you must first set the *minSdkVersion* in the *build.gradle* file:
     ...
   }
 ```
+
 Add the following code to your `AndroidManifest.xml` file:
 
 ```xml
@@ -50,12 +52,14 @@ Add the following code to your `AndroidManifest.xml` file:
 ```
 
 #### iOS
+
 On iOS you need to set the *platform* in the *ios/Podfile* file:
 ```
 platform :ios, '11.0'
 ```
 
 #### Web
+
 Web support has been added in the 2.2.0 version, and should be considered preliminary.
 
 On the web platform you **must** register your application using an **HTTPS** redirect uri.
@@ -81,13 +85,13 @@ window.onload = function() {
 See [oauth2_client](https://github.com/teranetsrl/oauth2_client/) for more information.
 
 #### Linux
+
 - Install the `libsecret-1-dev` dependency:
 ```bash
 sudo apt-get install libsecret-1-dev
 ```
 
 #### Linux/Windows:
-
 
    - Define a local port for the web server:
 
@@ -173,6 +177,48 @@ print('Artist name: ${artist?.name}');
 ```dart
 final playlist = await spotifyService.getPlaylist('playlist_id');
 print('Playlist name: ${playlist?.name}');
+```
+
+**Get similar artists:**
+
+```dart
+final similarArtists = await spotifyService.getSimilarArtists('artist_id');
+print('Similar artists: ${similarArtists.map((artist) => artist.name).join(', ')}');
+```
+
+**Get album tracks:**
+
+```dart
+final albumTracks = await spotifyService.getAlbumTracks('album_id');
+print('Album tracks: ${albumTracks.map((track) => track.name).join(', ')}');
+```
+
+**Get an artist's top tracks:**
+
+```dart
+final topTracks = await spotifyService.getTopTracks('artist_id');
+print('Top tracks: ${topTracks.map((track) => track.name).join(', ')}');
+```
+
+**Get an artist's top albums:**
+
+```dart
+final topAlbums = await spotifyService.getTopAlbums('artist_id');
+print('Top albums: ${topAlbums.map((album) => album.name).join(', ')}');
+```
+
+**Get an artist's top singles:**
+
+```dart
+final topSingles = await spotifyService.getTopSingles('artist_id');
+print('Top singles: ${topSingles.map((album) => album.name).join(', ')}');
+```
+
+**Get user playlists:**
+
+```dart
+final userPlaylists = await spotifyService.getUserPlaylists();
+print('User playlists: ${userPlaylists.map((playlist) => playlist.name).join(', ')}');
 ```
 
 ### API Documentation
