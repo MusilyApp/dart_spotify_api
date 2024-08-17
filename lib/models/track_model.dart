@@ -46,7 +46,7 @@ class SimplifiedTrack {
       id: map['id'] as String,
       name: map['name'] as String,
       artists: List<SimplifiedArtist>.from(
-        (map['artists'] as List<int>).map<SimplifiedArtist>(
+        (map['artists'] as List).map<SimplifiedArtist>(
           (x) => SimplifiedArtist.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -55,7 +55,7 @@ class SimplifiedTrack {
       ),
       explicit: map['explicit'] as bool,
       availableMarkets: List<Market>.from(
-        (map['available_markets'] as List<String>).map<Market>(
+        (map['available_markets'] as List? ?? []).map<Market>(
           (x) => Market.values.byName(x),
         ),
       ),
@@ -133,7 +133,7 @@ class TrackModel {
         ),
       ),
       availableMarkets: List<Market>.from(
-        (map['available_markets']).map<Market>(
+        (map['available_markets'] as List? ?? []).map<Market>(
           (x) => Market.values.byName(x),
         ),
       ),
