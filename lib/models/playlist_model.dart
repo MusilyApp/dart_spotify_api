@@ -6,6 +6,7 @@ import 'package:dart_spotify_api/models/user_model.dart';
 
 class SimplifiedPlaylist {
   final String id;
+  final String name;
   final List<ImageModel> images;
   final UserModel owner;
   final bool public;
@@ -16,6 +17,7 @@ class SimplifiedPlaylist {
 
   SimplifiedPlaylist({
     required this.id,
+    required this.name,
     required this.images,
     required this.owner,
     required this.public,
@@ -28,6 +30,7 @@ class SimplifiedPlaylist {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'name': name,
       'images': images.map((x) => x.toMap()).toList(),
       'owner': owner.toMap(),
       'public': public,
@@ -41,6 +44,7 @@ class SimplifiedPlaylist {
   factory SimplifiedPlaylist.fromMap(Map<String, dynamic> map) {
     return SimplifiedPlaylist(
       id: map['id'] as String,
+      name: map['name'],
       images: List<ImageModel>.from(
         (map['images']).map<ImageModel>(
           (x) => ImageModel.fromMap(x as Map<String, dynamic>),
@@ -62,7 +66,7 @@ class SimplifiedPlaylist {
 
   @override
   String toString() {
-    return 'SimplifiedPlaylist(id: $id, images: $images, owner: $owner, public: $public, snapshotId: $snapshotId, totalTracks: $totalTracks, collaborative: $collaborative, description: $description)';
+    return 'SimplifiedPlaylist(id: $id, name: $name, images: $images, owner: $owner, public: $public, snapshotId: $snapshotId, totalTracks: $totalTracks, collaborative: $collaborative, description: $description)';
   }
 }
 
